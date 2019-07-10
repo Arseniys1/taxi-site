@@ -19,7 +19,7 @@ class ApiTokenAuth
      */
     public function handle($request, Closure $next)
     {
-        $userSession = UserSession::where('token', '=', $request->header('Api-Auth'))->first();
+        $userSession = UserSession::where('token', '=', $request->header('Api-Token'))->first();
 
         if (!$userSession || Carbon::now()->gt($userSession->expire_at)) {
             return response('Unauthorized', 401);

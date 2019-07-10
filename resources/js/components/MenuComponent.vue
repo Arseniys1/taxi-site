@@ -81,6 +81,8 @@
     .menu {
         position: absolute;
         z-index: 1000;
+        max-height: calc(100vh - 2rem);
+        overflow-y: auto;
     }
 
     .menu .paper {

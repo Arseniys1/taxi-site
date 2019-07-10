@@ -26,3 +26,14 @@ Route::get('/checkSMSCode', 'Api\CheckSMSCode@get')
 Route::get('/resendActivationCode', 'Api\ResendActivationCode@get')
     ->middleware('throttle:5,1');
 
+Route::post('/taxiOrder', 'Api\TaxiOrder@get')
+    ->middleware('api.auth');
+
+Route::post('/getTaxiOrder', 'Api\GetTaxiOrder@get')
+    ->middleware('api.auth');
+
+Route::get('/', function () {
+    return '';
+})
+    ->middleware('api.auth', 'permissions:driver');
+

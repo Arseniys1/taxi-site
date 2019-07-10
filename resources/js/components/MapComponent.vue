@@ -49,18 +49,28 @@
         methods: {
             onMapClick(e) {
                 if (this.marker1 == null) {
+
                     this.marker1 = new L.marker(e.latlng, {draggable: true});
                     this.marker1.on('dragend', function(event) {
                         this.sendPost();
+                        window._form_taxi_order.geocoderSearchByLatLng(1, this.marker1.getLatLng());
                     }.bind(this));
                     this.map.addLayer(this.marker1);
+
+                    window._form_taxi_order.geocoderSearchByLatLng(1, this.marker1.getLatLng());
+
                 }
                 else if (this.marker2 == null) {
+
                     this.marker2 = new L.marker(e.latlng, {draggable: true});
                     this.marker2.on('dragend', function(event) {
                         this.sendPost();
+                        window._form_taxi_order.geocoderSearchByLatLng(2, this.marker2.getLatLng());
                     }.bind(this));
                     this.map.addLayer(this.marker2);
+
+                    window._form_taxi_order.geocoderSearchByLatLng(2, this.marker2.getLatLng());
+
                     this.sendPost();
                 }
             },

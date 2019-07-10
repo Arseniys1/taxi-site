@@ -11411,6 +11411,8 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _Taxi_throttle__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../Taxi/throttle */ "./resources/js/Taxi/throttle.js");
+/* harmony import */ var _Taxi_time__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../Taxi/time */ "./resources/js/Taxi/time.js");
 //
 //
 //
@@ -11443,10 +11445,114 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "FormTaxiOrderComponent",
   created: function created() {
     window._form_taxi_order = this;
+  },
+  data: function data() {
+    return {
+      query: {
+        lastRequestTime: 0,
+        from: '',
+        to: '',
+        results: [],
+        // 1 = Откуда | 2 = Куда
+        resultsOf: 1,
+        nullResult: false
+      },
+      route: {
+        from: '',
+        to: ''
+      }
+    };
+  },
+  methods: {
+    fromSearch: function fromSearch() {
+      this.query.resultsOf = 1;
+
+      if (this.query.lastRequestTime < Object(_Taxi_time__WEBPACK_IMPORTED_MODULE_1__["default"])()) {
+        this.query.lastRequestTime = Object(_Taxi_time__WEBPACK_IMPORTED_MODULE_1__["default"])();
+        this.geocoderSearch(this.query.from);
+      } else Object(_Taxi_throttle__WEBPACK_IMPORTED_MODULE_0__["default"])(this.fromSearch, 1000);
+    },
+    toSearch: function toSearch() {
+      this.query.resultsOf = 2;
+
+      if (this.query.lastRequestTime < Object(_Taxi_time__WEBPACK_IMPORTED_MODULE_1__["default"])()) {
+        this.query.lastRequestTime = Object(_Taxi_time__WEBPACK_IMPORTED_MODULE_1__["default"])();
+        this.geocoderSearch(this.query.to);
+      } else Object(_Taxi_throttle__WEBPACK_IMPORTED_MODULE_0__["default"])(this.toSearch, 1000);
+    },
+    resultSelect: function resultSelect(point, index) {
+      // point 1 = Откуда | 2 = Куда
+      if (point === 1) {
+        this.route.from = this.query.results[index];
+        this.query.from = this.route.from.display_name;
+      } else if (point === 2) {
+        this.route.to = this.query.results[index];
+        this.query.to = this.route.to.display_name;
+      }
+
+      this.query.results = [];
+      this.query.nullResult = false;
+    },
+    selectMarker: function selectMarker(point) {
+      // point 1 = Откуда | 2 = Куда
+      this.query.nullResult = false;
+    },
+    geocoderSearch: function geocoderSearch(query) {
+      console.log(query);
+      query = 'Россия, Пермский край, ' + query;
+      var params = {
+        q: query,
+        format: 'json'
+      };
+      axios.get('https://nominatim.openstreetmap.org/search', {
+        params: params
+      }).then(function (response) {
+        console.log(response);
+        this.query.results = response.data;
+        if (this.query.results.length === 0) this.query.nullResult = true;
+      }.bind(this))["catch"](function (error) {
+        console.error(error);
+      });
+    },
+    geocoderSearchByLatLng: function geocoderSearchByLatLng(point, latLng) {
+      // point 1 = Откуда | 2 = Куда
+      var params = {
+        lat: latLng.lat,
+        lon: latLng.lng,
+        format: 'json'
+      };
+      axios.get('https://nominatim.openstreetmap.org/reverse', {
+        params: params
+      }).then(function (response) {
+        console.log(response);
+
+        if (point === 1) {
+          this.query.from = response.data.display_name;
+        } else if (point === 2) {
+          this.query.to = response.data.display_name;
+        }
+      }.bind(this))["catch"](function (error) {
+        console.error(error);
+      });
+    }
   }
 });
 
@@ -11507,16 +11613,25 @@ __webpack_require__.r(__webpack_exports__);
         });
         this.marker1.on('dragend', function (event) {
           this.sendPost();
+
+          window._form_taxi_order.geocoderSearchByLatLng(1, this.marker1.getLatLng());
         }.bind(this));
         this.map.addLayer(this.marker1);
+
+        window._form_taxi_order.geocoderSearchByLatLng(1, this.marker1.getLatLng());
       } else if (this.marker2 == null) {
         this.marker2 = new L.marker(e.latlng, {
           draggable: true
         });
         this.marker2.on('dragend', function (event) {
           this.sendPost();
+
+          window._form_taxi_order.geocoderSearchByLatLng(2, this.marker2.getLatLng());
         }.bind(this));
         this.map.addLayer(this.marker2);
+
+        window._form_taxi_order.geocoderSearchByLatLng(2, this.marker2.getLatLng());
+
         this.sendPost();
       }
     },
@@ -16087,6 +16202,25 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
+/***/ "./node_modules/css-loader/index.js?!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/FormTaxiOrderComponent.vue?vue&type=style&index=0&id=3defea9c&scoped=true&lang=css&":
+/*!****************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/css-loader??ref--6-1!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src??ref--6-2!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/FormTaxiOrderComponent.vue?vue&type=style&index=0&id=3defea9c&scoped=true&lang=css& ***!
+  \****************************************************************************************************************************************************************************************************************************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loader/lib/css-base.js */ "./node_modules/css-loader/lib/css-base.js")(false);
+// imports
+
+
+// module
+exports.push([module.i, "\n.search-results[data-v-3defea9c] {\n    max-height: 700px;\n    overflow-y: auto;\n}\n.search-results li[data-v-3defea9c] {\n    cursor: pointer;\n}\n.search-results li[data-v-3defea9c]:hover {\n    color: #1d68a7;\n}\n", ""]);
+
+// exports
+
+
+/***/ }),
+
 /***/ "./node_modules/css-loader/index.js?!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/MapComponent.vue?vue&type=style&index=0&id=2f302b28&scoped=true&lang=css&":
 /*!******************************************************************************************************************************************************************************************************************************************************************************************************!*\
   !*** ./node_modules/css-loader??ref--6-1!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src??ref--6-2!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/MapComponent.vue?vue&type=style&index=0&id=2f302b28&scoped=true&lang=css& ***!
@@ -16118,7 +16252,7 @@ exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loa
 
 
 // module
-exports.push([module.i, "\n.menu[data-v-98f701fa] {\n    position: absolute;\n    z-index: 1000;\n}\n.menu .paper[data-v-98f701fa] {\n    background-color: #fff;\n    box-shadow: 0 0 5px rgba(0,0,0,0.5);\n    /*height: 700px;*/\n}\n", ""]);
+exports.push([module.i, "\n.menu[data-v-98f701fa] {\n    position: absolute;\n    z-index: 1000;\n    max-height: calc(100vh - 2rem);\n    overflow-y: auto;\n}\n.menu .paper[data-v-98f701fa] {\n    background-color: #fff;\n    box-shadow: 0 0 5px rgba(0,0,0,0.5);\n    /*height: 700px;*/\n}\n", ""]);
 
 // exports
 
@@ -61161,6 +61295,36 @@ process.umask = function() { return 0; };
 
 /***/ }),
 
+/***/ "./node_modules/style-loader/index.js!./node_modules/css-loader/index.js?!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/FormTaxiOrderComponent.vue?vue&type=style&index=0&id=3defea9c&scoped=true&lang=css&":
+/*!********************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/style-loader!./node_modules/css-loader??ref--6-1!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src??ref--6-2!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/FormTaxiOrderComponent.vue?vue&type=style&index=0&id=3defea9c&scoped=true&lang=css& ***!
+  \********************************************************************************************************************************************************************************************************************************************************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+
+var content = __webpack_require__(/*! !../../../node_modules/css-loader??ref--6-1!../../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../../node_modules/postcss-loader/src??ref--6-2!../../../node_modules/vue-loader/lib??vue-loader-options!./FormTaxiOrderComponent.vue?vue&type=style&index=0&id=3defea9c&scoped=true&lang=css& */ "./node_modules/css-loader/index.js?!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/FormTaxiOrderComponent.vue?vue&type=style&index=0&id=3defea9c&scoped=true&lang=css&");
+
+if(typeof content === 'string') content = [[module.i, content, '']];
+
+var transform;
+var insertInto;
+
+
+
+var options = {"hmr":true}
+
+options.transform = transform
+options.insertInto = undefined;
+
+var update = __webpack_require__(/*! ../../../node_modules/style-loader/lib/addStyles.js */ "./node_modules/style-loader/lib/addStyles.js")(content, options);
+
+if(content.locals) module.exports = content.locals;
+
+if(false) {}
+
+/***/ }),
+
 /***/ "./node_modules/style-loader/index.js!./node_modules/css-loader/index.js?!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/MapComponent.vue?vue&type=style&index=0&id=2f302b28&scoped=true&lang=css&":
 /*!**********************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
   !*** ./node_modules/style-loader!./node_modules/css-loader??ref--6-1!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src??ref--6-2!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/MapComponent.vue?vue&type=style&index=0&id=2f302b28&scoped=true&lang=css& ***!
@@ -61939,86 +62103,224 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _vm._m(0)
+  return _c("div", { attrs: { id: "form-taxi-order" } }, [
+    _c("form", [
+      _c("div", { staticClass: "form-group" }, [
+        _c("label", { attrs: { for: "from" } }, [_vm._v("Откуда")]),
+        _vm._v(" "),
+        _c("input", {
+          directives: [
+            {
+              name: "model",
+              rawName: "v-model",
+              value: _vm.query.from,
+              expression: "query.from"
+            }
+          ],
+          staticClass: "form-control",
+          attrs: { type: "text", id: "from", placeholder: "Откуда" },
+          domProps: { value: _vm.query.from },
+          on: {
+            input: [
+              function($event) {
+                if ($event.target.composing) {
+                  return
+                }
+                _vm.$set(_vm.query, "from", $event.target.value)
+              },
+              _vm.fromSearch
+            ]
+          }
+        }),
+        _vm._v(" "),
+        _vm.query.results.length > 0 && _vm.query.resultsOf === 1
+          ? _c("div", { staticClass: "search-results" }, [
+              _c(
+                "ul",
+                { staticClass: "list-group" },
+                _vm._l(_vm.query.results, function(item, index) {
+                  return _c(
+                    "li",
+                    {
+                      key: index,
+                      staticClass: "list-group-item",
+                      on: {
+                        click: function($event) {
+                          return _vm.resultSelect(1, index)
+                        }
+                      }
+                    },
+                    [_vm._v(_vm._s(item.display_name))]
+                  )
+                }),
+                0
+              )
+            ])
+          : _vm._e(),
+        _vm._v(" "),
+        _vm.query.nullResult && _vm.query.resultsOf === 1
+          ? _c(
+              "a",
+              {
+                staticClass: "d-block mt-2",
+                attrs: { href: "#" },
+                on: {
+                  click: function($event) {
+                    return _vm.selectMarker(1)
+                  }
+                }
+              },
+              [_vm._v("Не нашли адрес в поиске? Укажите метку на карте.")]
+            )
+          : _vm._e()
+      ]),
+      _vm._v(" "),
+      _c("div", { staticClass: "form-group" }, [
+        _c("label", { attrs: { for: "to" } }, [_vm._v("Куда")]),
+        _vm._v(" "),
+        _c("input", {
+          directives: [
+            {
+              name: "model",
+              rawName: "v-model",
+              value: _vm.query.to,
+              expression: "query.to"
+            }
+          ],
+          staticClass: "form-control",
+          attrs: { type: "text", id: "to", placeholder: "Куда" },
+          domProps: { value: _vm.query.to },
+          on: {
+            input: [
+              function($event) {
+                if ($event.target.composing) {
+                  return
+                }
+                _vm.$set(_vm.query, "to", $event.target.value)
+              },
+              _vm.toSearch
+            ]
+          }
+        }),
+        _vm._v(" "),
+        _vm.query.results.length > 0 && _vm.query.resultsOf === 2
+          ? _c("div", { staticClass: "search-results" }, [
+              _c(
+                "ul",
+                { staticClass: "list-group" },
+                _vm._l(_vm.query.results, function(item, index) {
+                  return _c(
+                    "li",
+                    {
+                      key: index,
+                      staticClass: "list-group-item",
+                      on: {
+                        click: function($event) {
+                          return _vm.resultSelect(2, index)
+                        }
+                      }
+                    },
+                    [_vm._v(_vm._s(item.display_name))]
+                  )
+                }),
+                0
+              )
+            ])
+          : _vm._e(),
+        _vm._v(" "),
+        _vm.query.nullResult && _vm.query.resultsOf === 2
+          ? _c(
+              "a",
+              {
+                staticClass: "d-block mt-2",
+                attrs: { href: "#" },
+                on: {
+                  click: function($event) {
+                    return _vm.selectMarker(2)
+                  }
+                }
+              },
+              [_vm._v("Не нашли адрес в поиске? Укажите метку на карте.")]
+            )
+          : _vm._e()
+      ]),
+      _vm._v(" "),
+      _vm._m(0),
+      _vm._v(" "),
+      _vm._m(1),
+      _vm._v(" "),
+      _vm._m(2),
+      _vm._v(" "),
+      _vm._m(3),
+      _vm._v(" "),
+      _c("button", { staticClass: "btn btn-dark", attrs: { type: "submit" } }, [
+        _vm._v("Заказать")
+      ])
+    ])
+  ])
 }
 var staticRenderFns = [
   function() {
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", { attrs: { id: "form-taxi-order" } }, [
-      _c("form", [
-        _c("div", { staticClass: "form-group" }, [
-          _c("label", { attrs: { for: "from" } }, [_vm._v("Откуда")]),
-          _vm._v(" "),
-          _c("input", {
-            staticClass: "form-control",
-            attrs: { type: "text", id: "from", placeholder: "Откуда" }
-          })
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "form-group" }, [
-          _c("label", { attrs: { for: "to" } }, [_vm._v("Куда")]),
-          _vm._v(" "),
-          _c("input", {
-            staticClass: "form-control",
-            attrs: { type: "text", id: "to", placeholder: "Куда" }
-          })
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "form-group" }, [
-          _c("label", { attrs: { for: "phone" } }, [_vm._v("Номер телефона")]),
-          _vm._v(" "),
-          _c("input", {
-            staticClass: "form-control",
-            attrs: { type: "text", id: "phone", placeholder: "Номер телефона" }
-          })
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "form-group form-check" }, [
-          _c("input", {
-            staticClass: "form-check-input",
-            attrs: { type: "checkbox", id: "delivery" }
-          }),
-          _vm._v(" "),
-          _c(
-            "label",
-            { staticClass: "form-check-label", attrs: { for: "delivery" } },
-            [_vm._v("Доставка")]
-          )
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "form-group form-check" }, [
-          _c("input", {
-            staticClass: "form-check-input",
-            attrs: { type: "checkbox", id: "children" }
-          }),
-          _vm._v(" "),
-          _c(
-            "label",
-            { staticClass: "form-check-label", attrs: { for: "children" } },
-            [_vm._v("Дети")]
-          )
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "form-group" }, [
-          _c("label", { attrs: { for: "comment" } }, [
-            _vm._v("Комментарий к заказу")
-          ]),
-          _vm._v(" "),
-          _c("textarea", {
-            staticClass: "form-control",
-            staticStyle: { resize: "none" },
-            attrs: { id: "comment", rows: "5" }
-          })
-        ]),
-        _vm._v(" "),
-        _c(
-          "button",
-          { staticClass: "btn btn-dark", attrs: { type: "submit" } },
-          [_vm._v("Заказать")]
-        )
-      ])
+    return _c("div", { staticClass: "form-group" }, [
+      _c("label", { attrs: { for: "phone" } }, [_vm._v("Номер телефона")]),
+      _vm._v(" "),
+      _c("input", {
+        staticClass: "form-control",
+        attrs: { type: "text", id: "phone", placeholder: "Номер телефона" }
+      })
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "form-group form-check" }, [
+      _c("input", {
+        staticClass: "form-check-input",
+        attrs: { type: "checkbox", id: "delivery" }
+      }),
+      _vm._v(" "),
+      _c(
+        "label",
+        { staticClass: "form-check-label", attrs: { for: "delivery" } },
+        [_vm._v("Доставка")]
+      )
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "form-group form-check" }, [
+      _c("input", {
+        staticClass: "form-check-input",
+        attrs: { type: "checkbox", id: "children" }
+      }),
+      _vm._v(" "),
+      _c(
+        "label",
+        { staticClass: "form-check-label", attrs: { for: "children" } },
+        [_vm._v("Дети")]
+      )
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "form-group" }, [
+      _c("label", { attrs: { for: "comment" } }, [
+        _vm._v("Комментарий к заказу")
+      ]),
+      _vm._v(" "),
+      _c("textarea", {
+        staticClass: "form-control",
+        staticStyle: { resize: "none" },
+        attrs: { id: "comment", rows: "5" }
+      })
     ])
   }
 ]
@@ -74317,6 +74619,47 @@ webpackContext.id = "./resources/js sync recursive \\.vue$/";
 
 /***/ }),
 
+/***/ "./resources/js/Taxi/throttle.js":
+/*!***************************************!*\
+  !*** ./resources/js/Taxi/throttle.js ***!
+  \***************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return throttle; });
+function throttle(callback, limit) {
+  var wait = false;
+  return function () {
+    if (!wait) {
+      callback.call();
+      wait = true;
+      setTimeout(function () {
+        wait = false;
+      }, limit);
+    }
+  };
+}
+
+/***/ }),
+
+/***/ "./resources/js/Taxi/time.js":
+/*!***********************************!*\
+  !*** ./resources/js/Taxi/time.js ***!
+  \***********************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return time; });
+function time() {
+  return Math.floor(Date.now() / 1000);
+}
+
+/***/ }),
+
 /***/ "./resources/js/app.js":
 /*!*****************************!*\
   !*** ./resources/js/app.js ***!
@@ -74656,7 +74999,9 @@ __webpack_require__.r(__webpack_exports__);
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _FormTaxiOrderComponent_vue_vue_type_template_id_3defea9c_scoped_true___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./FormTaxiOrderComponent.vue?vue&type=template&id=3defea9c&scoped=true& */ "./resources/js/components/FormTaxiOrderComponent.vue?vue&type=template&id=3defea9c&scoped=true&");
 /* harmony import */ var _FormTaxiOrderComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./FormTaxiOrderComponent.vue?vue&type=script&lang=js& */ "./resources/js/components/FormTaxiOrderComponent.vue?vue&type=script&lang=js&");
-/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+/* empty/unused harmony star reexport *//* harmony import */ var _FormTaxiOrderComponent_vue_vue_type_style_index_0_id_3defea9c_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./FormTaxiOrderComponent.vue?vue&type=style&index=0&id=3defea9c&scoped=true&lang=css& */ "./resources/js/components/FormTaxiOrderComponent.vue?vue&type=style&index=0&id=3defea9c&scoped=true&lang=css&");
+/* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
 
 
 
@@ -74664,7 +75009,7 @@ __webpack_require__.r(__webpack_exports__);
 
 /* normalize component */
 
-var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
+var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_3__["default"])(
   _FormTaxiOrderComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
   _FormTaxiOrderComponent_vue_vue_type_template_id_3defea9c_scoped_true___WEBPACK_IMPORTED_MODULE_0__["render"],
   _FormTaxiOrderComponent_vue_vue_type_template_id_3defea9c_scoped_true___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
@@ -74693,6 +75038,22 @@ component.options.__file = "resources/js/components/FormTaxiOrderComponent.vue"
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_FormTaxiOrderComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/babel-loader/lib??ref--4-0!../../../node_modules/vue-loader/lib??vue-loader-options!./FormTaxiOrderComponent.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/FormTaxiOrderComponent.vue?vue&type=script&lang=js&");
 /* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_FormTaxiOrderComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ }),
+
+/***/ "./resources/js/components/FormTaxiOrderComponent.vue?vue&type=style&index=0&id=3defea9c&scoped=true&lang=css&":
+/*!*********************************************************************************************************************!*\
+  !*** ./resources/js/components/FormTaxiOrderComponent.vue?vue&type=style&index=0&id=3defea9c&scoped=true&lang=css& ***!
+  \*********************************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_6_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_2_node_modules_vue_loader_lib_index_js_vue_loader_options_FormTaxiOrderComponent_vue_vue_type_style_index_0_id_3defea9c_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/style-loader!../../../node_modules/css-loader??ref--6-1!../../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../../node_modules/postcss-loader/src??ref--6-2!../../../node_modules/vue-loader/lib??vue-loader-options!./FormTaxiOrderComponent.vue?vue&type=style&index=0&id=3defea9c&scoped=true&lang=css& */ "./node_modules/style-loader/index.js!./node_modules/css-loader/index.js?!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/FormTaxiOrderComponent.vue?vue&type=style&index=0&id=3defea9c&scoped=true&lang=css&");
+/* harmony import */ var _node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_6_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_2_node_modules_vue_loader_lib_index_js_vue_loader_options_FormTaxiOrderComponent_vue_vue_type_style_index_0_id_3defea9c_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_6_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_2_node_modules_vue_loader_lib_index_js_vue_loader_options_FormTaxiOrderComponent_vue_vue_type_style_index_0_id_3defea9c_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0__);
+/* harmony reexport (unknown) */ for(var __WEBPACK_IMPORT_KEY__ in _node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_6_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_2_node_modules_vue_loader_lib_index_js_vue_loader_options_FormTaxiOrderComponent_vue_vue_type_style_index_0_id_3defea9c_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0__) if(__WEBPACK_IMPORT_KEY__ !== 'default') (function(key) { __webpack_require__.d(__webpack_exports__, key, function() { return _node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_6_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_2_node_modules_vue_loader_lib_index_js_vue_loader_options_FormTaxiOrderComponent_vue_vue_type_style_index_0_id_3defea9c_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0__[key]; }) }(__WEBPACK_IMPORT_KEY__));
+ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_6_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_2_node_modules_vue_loader_lib_index_js_vue_loader_options_FormTaxiOrderComponent_vue_vue_type_style_index_0_id_3defea9c_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0___default.a); 
 
 /***/ }),
 
