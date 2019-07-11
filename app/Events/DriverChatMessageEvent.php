@@ -2,8 +2,6 @@
 
 namespace App\Events;
 
-use App\Order;
-use App\User;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Broadcasting\PrivateChannel;
@@ -12,29 +10,29 @@ use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 
-class DriverTakeOrderEvent implements ShouldBroadcast
+class DriverChatMessageEvent implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    public $order;
     public $user;
+    public $message;
 
     /**
-     * DriverTakeOrderEvent constructor.
-     * @param $order
+     * DriverChatMessageEvent constructor.
      * @param $user
+     * @param $message
      */
-    public function __construct($order, $user)
+    public function __construct($user, $message)
     {
-        $this->order = $order;
         $this->user = $user;
+        $this->message = $message;
     }
 
     /**
      * @return string
      */
     public function broadcastAs() {
-        return 'DriverTakeOrderEvent';
+        return 'DriverChatMessageEvent';
     }
 
     /**

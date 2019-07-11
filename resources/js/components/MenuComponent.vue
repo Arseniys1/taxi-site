@@ -10,7 +10,7 @@
             Показать меню
         </button>
 
-        <div class="paper p-2" v-if="!view.showMap">
+        <div class="paper p-2 m-1" v-if="!view.showMap">
             <div class="form">
                 <form-taxi-order-component v-if="view.viewForm === this.$root.VIEW_FORM_TAXI_ORDER"></form-taxi-order-component>
                 <form-register-by-code-component v-if="view.viewForm === this.$root.VIEW_FORM_REGISTER_BY_CODE"></form-register-by-code-component>

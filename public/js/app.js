@@ -72610,7 +72610,7 @@ var render = function() {
         : _vm._e(),
       _vm._v(" "),
       !_vm.view.showMap
-        ? _c("div", { staticClass: "paper p-2" }, [
+        ? _c("div", { staticClass: "paper p-2 m-1" }, [
             _c(
               "div",
               { staticClass: "form" },
@@ -85550,6 +85550,10 @@ __webpack_require__(/*! ./subscribers */ "./resources/js/laravel-echo/subscriber
 /***/ (function(module, exports) {
 
 window.Echo["private"]('drivers').listen('.SosEvent', function (e) {
+  console.log(e);
+}).listen('.DriverTakeOrderEvent', function (e) {
+  console.log(e);
+}).listen('.DriverChatMessageEvent', function (e) {
   console.log(e);
 });
 

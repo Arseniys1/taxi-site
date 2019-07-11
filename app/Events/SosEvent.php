@@ -2,6 +2,7 @@
 
 namespace App\Events;
 
+use App\User;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Broadcasting\PrivateChannel;
@@ -14,18 +15,20 @@ class SosEvent implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    public $message = '';
+    public $user;
 
     /**
-     * Create a new event instance.
-     *
-     * @return void
+     * SosEvent constructor.
+     * @param $user
      */
-    public function __construct()
+    public function __construct($user)
     {
-        //
+        $this->user = $user;
     }
 
+    /**
+     * @return string
+     */
     public function broadcastAs() {
         return 'SosEvent';
     }
@@ -33,7 +36,7 @@ class SosEvent implements ShouldBroadcast
     /**
      * Get the channels the event should broadcast on.
      *
-     * @return \Illuminate\Broadcasting\Channel|array
+     * @return \Illuminate\Broadcasting\PrivateChannel|array
      */
     public function broadcastOn()
     {

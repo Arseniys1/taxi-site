@@ -16,6 +16,5 @@
 //});
 
 Broadcast::channel('drivers', function ($user) {
-//    return $user->hasPermissions('driver')->result();
-    return true;
+    return $user->hasPermissions('driver')->result();
 });

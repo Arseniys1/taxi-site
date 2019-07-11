@@ -17,7 +17,7 @@ use Illuminate\Http\Request;
 //    return $request->user();
 //});
 
-Route::post('/broadcasting/auth', function (\Illuminate\Http\Request $request) {
+Route::post('/broadcasting/auth', function (Request $request) {
     return \Illuminate\Support\Facades\Broadcast::auth($request);
 })
     ->middleware('api.auth');
@@ -52,7 +52,9 @@ Route::post('/driverOnline', 'Api\DriverOnline@get')
 Route::post('/driverOffline', 'Api\DriverOffline@get')
     ->middleware('api.auth', 'permissions:driver');
 
-Route::get('/broadcast', function () {
-    broadcast(new \App\Events\SosEvent());
-});
+Route::post('/driverSos', 'Api\DriverSos@get')
+    ->middleware('api.auth', 'permissions:driver');
+
+Route::post('/driverChatMessage', 'Api\DriverChatMessage@get')
+    ->middleware('api.auth', 'permissions:driver,driver.driverChatMessage');
 
