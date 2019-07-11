@@ -10,11 +10,9 @@ use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 
-class SosEvent implements ShouldBroadcast
+class DriverTakeOrderEvent implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
-
-    public $message = '';
 
     /**
      * Create a new event instance.
@@ -26,10 +24,6 @@ class SosEvent implements ShouldBroadcast
         //
     }
 
-    public function broadcastAs() {
-        return 'SosEvent';
-    }
-
     /**
      * Get the channels the event should broadcast on.
      *
@@ -37,6 +31,6 @@ class SosEvent implements ShouldBroadcast
      */
     public function broadcastOn()
     {
-        return new PrivateChannel('drivers');
+        return new PrivateChannel('channel-name');
     }
 }

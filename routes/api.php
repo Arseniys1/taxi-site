@@ -17,6 +17,11 @@ use Illuminate\Http\Request;
 //    return $request->user();
 //});
 
+Route::post('/broadcasting/auth', function (\Illuminate\Http\Request $request) {
+    return \Illuminate\Support\Facades\Broadcast::auth($request);
+})
+    ->middleware('api.auth');
+
 Route::post('/registerByPhoneNumber', 'Api\RegisterByPhoneNumber@get')
     ->middleware('throttle:5,1');
 
