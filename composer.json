@@ -13,6 +13,7 @@
         "guzzlehttp/guzzle": "~6.0",
         "laravel/framework": "5.8.*",
         "laravel/tinker": "^1.0",
+        "predis/predis": "^1.1",
         "propaganistas/laravel-phone": "^4.2"
     },
     "require-dev": {

@@ -22,6 +22,7 @@ class CreateOrdersTable extends Migration
             $table->text('comment')->nullable();
             $table->string('status', 100)->default('created');
             // created - заказ создан, поиск водителя.
+            // driver_in_way - водитель в пути.
             // in_way - в пути.
             // closed - выполнен.
             $table->timestamps();

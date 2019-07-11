@@ -17,13 +17,13 @@ use Illuminate\Http\Request;
 //    return $request->user();
 //});
 
-Route::get('/registerByPhoneNumber', 'Api\RegisterByPhoneNumber@get')
+Route::post('/registerByPhoneNumber', 'Api\RegisterByPhoneNumber@get')
     ->middleware('throttle:5,1');
 
-Route::get('/checkSMSCode', 'Api\CheckSMSCode@get')
+Route::post('/checkSMSCode', 'Api\CheckSMSCode@get')
     ->middleware('throttle:5,1', 'api.auth');
 
-Route::get('/resendActivationCode', 'Api\ResendActivationCode@get')
+Route::post('/resendActivationCode', 'Api\ResendActivationCode@get')
     ->middleware('throttle:5,1');
 
 Route::post('/taxiOrder', 'Api\TaxiOrder@get')
@@ -32,8 +32,22 @@ Route::post('/taxiOrder', 'Api\TaxiOrder@get')
 Route::post('/getTaxiOrder', 'Api\GetTaxiOrder@get')
     ->middleware('api.auth');
 
-Route::get('/', function () {
-    return '';
-})
+Route::post('/getUser', 'Api\GetUser@get')
+    ->middleware('api.auth');
+
+Route::post('/getDriverCreatedOrders', 'Api\GetDriverCreatedOrders@get')
+    ->middleware('api.auth', 'permissions:driver,driver.getDriverCreatedOrders');
+
+Route::post('/driverTakeOrder', 'Api\DriverTakeOrder@get')
+    ->middleware('api.auth', 'permissions:driver,driver.driverTakeOrder');
+
+Route::post('/driverOnline', 'Api\DriverOnline@get')
     ->middleware('api.auth', 'permissions:driver');
+
+Route::post('/driverOffline', 'Api\DriverOffline@get')
+    ->middleware('api.auth', 'permissions:driver');
+
+Route::get('/broadcast', function () {
+    broadcast(new \App\Events\SosEvent());
+});
 
